@@ -18,7 +18,10 @@ class UserService {
   }
 
   async get(id) {
-    throw new Error("Not implemented");
+    const token = localStorage.getItem('jwt_token');
+    axios.defaults.headers.common['Authorization'] = token;
+    const response = await axios.get(`${this.url}/users/${id}`);
+    return response;
   }
 
   async create(data) {

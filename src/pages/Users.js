@@ -178,7 +178,7 @@ class Users extends React.Component {
                         <td>{usuario.name}</td>
                         <td>{usuario.type}</td>
                         <td>
-                          <Button variant="warning" size="sm"
+                          <Button variant="warning" size="sm" className="m-1"
                             onClick={() => this.handleClickEditModal(usuario)}>
                             Editar
                           </Button>
