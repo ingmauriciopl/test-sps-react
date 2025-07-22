@@ -1,22 +1,46 @@
 import axios from "axios";
 
 class UserService {
-  async list() {
-    const users = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users`);
-    return users;
+  url = process.env.REACT_APP_SERVER_URL;
+
+  async auth(email, password) {
+    const response = await axios.post(`${this.url}/auth`, { email, password })
+    const token = response.data.token;
+    localStorage.setItem('jwt_token', token);
+    return response
   }
+
+  async list() {
+    const token = localStorage.getItem('jwt_token');
+    axios.defaults.headers.common['Authorization'] = token;
+    const response = await axios.get(`${this.url}/users`);
+    return response;
+  }
+
   async get(id) {
     throw new Error("Not implemented");
   }
+
   async create(data) {
-    throw new Error("Not implemented");
+    const token = localStorage.getItem('jwt_token');
+    axios.defaults.headers.common['Authorization'] = token;
+    const response = await axios.post(`${this.url}/users`, data);
+    return response;
   }
+
   async delete(id) {
-    throw new Error("Not implemented");
+    const token = localStorage.getItem('jwt_token');
+    axios.defaults.headers.common['Authorization'] = token;
+    const response = await axios.delete(`${this.url}/users/${id}`);
+    return response;
   }
+
   async update(id, data) {
-    throw new Error("Not implemented");
+    const token = localStorage.getItem('jwt_token');
+    axios.defaults.headers.common['Authorization'] = token;
+    const response = await axios.put(`${this.url}/users/${id}`, data);
+    return response;
   }
 }
 
-export default UserService;
+export default new UserService;
